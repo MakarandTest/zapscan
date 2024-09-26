@@ -1,0 +1,42 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            pip install -r requirements.txt
+      - run:
+          name: Run Unit Tests
+          command: |
+            pytest
+
+  zap_scan:
+    docker:
+      - image: owasp/zap2docker-stable
+    steps:
+      - run:
+          name: Start OWASP ZAP in Headless Mode
+          command: |
+            docker run -u zap -p 8080:8080 owasp/zap2docker-stable zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true
+      - run:
+          name: Wait for ZAP to Start
+          command: sleep 30
+      - run:
+          name: Run ZAP Baseline Scan
+          command: |
+            docker run -v $(pwd):/zap/wrk/ -t owasp/zap2docker-stable zap-baseline.py -t http://172.27.151.110:8085/hospital/index.php -r zap_report.html
+      - store_artifacts:
+          path: zap_report.html
+          destination: security_reports/zap_report.html
+
+workflows:
+  version: 2
+  test_and_scan:
+    jobs:
+      - build
+      - zap_scan
