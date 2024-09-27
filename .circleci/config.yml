@@ -1,3 +1,9 @@
+version: 2.1
+
+workflows:
+  test-dast:
+    jobs:
+      - scan
 jobs:
   scan:
     docker:
