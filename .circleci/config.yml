@@ -7,8 +7,7 @@ jobs:
       - checkout
       - run:
           name: Run Unit Tests
-          command: |
-            pytest
+          command: | pytest
   scan:
     docker:
       - image: zaproxy/zap-stable
