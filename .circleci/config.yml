@@ -9,4 +9,4 @@ jobs:
               zap-baseline.py -t http://172.27.151.110:8085/hospital/index.php -r report.html              
       - store_artifacts:
           path: /zap/wrk
-          destination: zap-report           
+          destination: zap-report
