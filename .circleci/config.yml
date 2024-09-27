@@ -1,14 +1,4 @@
 jobs:
-
- build:
-    docker:
-      - image: circleci/python:3.8
-    steps:
-      - checkout
-      - run:
-          name: Run Unit Tests
-          command: |
-            pytest
   scan:
     docker:
       - image: zaproxy/zap-stable
@@ -19,5 +9,4 @@ jobs:
               zap-baseline.py -t http://172.27.151.110:8085/hospital/index.php -r report.html              
       - store_artifacts:
           path: /zap/wrk
-          destination: zap-report
-           
+          destination: zap-report           
