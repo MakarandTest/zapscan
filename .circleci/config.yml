@@ -1,4 +1,14 @@
 jobs:
+
+ build:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: Run Unit Tests
+          command: |
+            pytest
   scan:
     docker:
       - image: zaproxy/zap-stable
